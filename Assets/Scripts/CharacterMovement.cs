@@ -8,9 +8,8 @@ public class CharacterMovement : MonoBehaviour
     public float moveSpeed = 4f;
     public float shiftSpeed = 8f;
     public float currentSpeed;
-    [SerializeField] float lowJumpForce = 6f;
-    public float highJumpForce = 10f;
-    public float currentJumpForce;
+    [SerializeField] float JumpForce = 6f;
+    
     Vector3 direction;
     public bool isGrounded = false;
     // Start is called before the first frame update
@@ -18,7 +17,8 @@ public class CharacterMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         currentSpeed = moveSpeed;
-        currentJumpForce = highJumpForce;
+        
+        Physics.gravity = new Vector3(0, -1f, 0);
     }
 
     // Update is called once per frame
@@ -31,7 +31,7 @@ public class CharacterMovement : MonoBehaviour
         direction = transform.TransformDirection(direction);
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            rb.AddForce(new Vector3(0, currentJumpForce, 0), ForceMode.Impulse);
+            rb.AddForce(new Vector3(0, JumpForce, 0), ForceMode.Impulse);
             isGrounded = false;
             
         }
