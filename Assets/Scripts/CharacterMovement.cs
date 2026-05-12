@@ -12,13 +12,16 @@ public class CharacterMovement : MonoBehaviour
     
     Vector3 direction;
     public bool isGrounded = false;
+    public GameObject flashl;
     // Start is called before the first frame update
     void Start()
     {
+        TurnOffAllLights();
         rb = GetComponent<Rigidbody>();
         currentSpeed = moveSpeed;
         
         Physics.gravity = new Vector3(0, -1f, 0);
+        flashl.GetComponent<Light>().enabled = true;
     }
 
     // Update is called once per frame
@@ -45,5 +48,17 @@ public class CharacterMovement : MonoBehaviour
     {
         isGrounded = true;
         
+    }
+    public void TurnOffAllLights()
+    {
+        // Znajduje wszystkie œwiat³a (aktywne i nieaktywne) w scenie
+        Light[] allLights = FindObjectsByType<Light>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+        foreach (Light l in allLights)
+        {
+            l.enabled = false;
+        }
+
+        Debug.Log("Wszystkie œwiat³a zosta³y wy³¹czone!");
     }
 }
