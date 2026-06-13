@@ -472,7 +472,7 @@ Transform:
   m_GameObject: {fileID: 3612839527325648875}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.138, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -491,7 +491,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 0.6886792, g: 0.19815768, b: 0.19815768, a: 1}
   m_Intensity: 1
-  m_Range: 0.4390269
+  m_Range: 0.7918423
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -716,6 +716,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5541217224173093090}
   - component: {fileID: -771304926489778270}
+  - component: {fileID: -2901551347958354354}
   m_Layer: 0
   m_Name: MicroSD
   m_TagString: Untagged
@@ -755,6 +756,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positon: 2
+--- !u!114 &-2901551347958354354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5164937284816820824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72d9b81dd2fc79d4ebc83a185ade5390, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Level: 1
+  isCanUse: 0
 --- !u!1 &5615075116591959415
 GameObject:
   m_ObjectHideFlags: 0

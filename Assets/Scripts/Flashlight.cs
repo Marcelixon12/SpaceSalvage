@@ -8,6 +8,7 @@ public class Flashlight : MonoBehaviour
     [SerializeField] GameObject flash;
     public bool isTurn = false;
     public int battery = 100;
+    public int maxBattery = 100;
     public float timer;
     public int batteryUsage = 1;
     // Start is called before the first frame update
@@ -40,6 +41,18 @@ public class Flashlight : MonoBehaviour
                 timer = 0;
                 battery -= batteryUsage; 
             }
+        }
+        if (battery >= maxBattery)
+        {
+            battery = maxBattery;
+        }
+    }
+    public void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.CompareTag("Charger") && Input.GetKey(KeyCode.E) && other.gameObject.GetComponent<Charger>().batteryInMagazine > 0)
+        {
+            battery += other.gameObject.GetComponent<Charger>().chargeSpeed;
+            other.gameObject.GetComponent<Charger>().batteryInMagazine -= other.gameObject.GetComponent<Charger>().chargeSpeed;
         }
     }
 }

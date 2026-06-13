@@ -6,13 +6,22 @@ public class CharacterMovement : MonoBehaviour
 {
     Rigidbody rb;
     public float moveSpeed = 4f;
-    public float shiftSpeed = 8f;
+    public float shiftSpeed = 7f;
     public float currentSpeed;
     [SerializeField] float JumpForce = 6f;
+    public int Level = 1;
     
     Vector3 direction;
     public bool isGrounded = false;
     public GameObject flashl;
+    public GameObject cardLight;
+    public GameObject helmetLight;
+    public float oxygen = 100;
+    public float oxygenUsage = 0;
+    public float oxygenTimer = 0f;
+    public bool isPut = false;
+    
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -20,8 +29,12 @@ public class CharacterMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         currentSpeed = moveSpeed;
         
-        Physics.gravity = new Vector3(0, -1f, 0);
+        Physics.gravity = new Vector3(0, -7f, 0);
         flashl.GetComponent<Light>().enabled = true;
+        cardLight.GetComponent<Light>().enabled = true;
+        helmetLight.GetComponent<Light>().enabled = true;
+        oxygenUsage = 0.2f;
+        
     }
 
     // Update is called once per frame
@@ -32,12 +45,58 @@ public class CharacterMovement : MonoBehaviour
 
         direction = new Vector3(moveHorizontal, 0.0f, moveVertical);
         direction = transform.TransformDirection(direction);
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            
+            currentSpeed = shiftSpeed;
+            oxygenUsage = 0.7f;
+            
+        }
+        else if (!Input.GetKey(KeyCode.LeftShift) && direction.x == 0 && direction.z == 0)
+        {
+            
+            currentSpeed = moveSpeed;
+            oxygenUsage = 0.2f;
+
+        }
+        else if (!Input.GetKey(KeyCode.LeftShift) && direction.x != 0 && direction.z != 0)
+        {
+
+            currentSpeed = moveSpeed;
+            oxygenUsage = 0.4f;
+
+        }
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.AddForce(new Vector3(0, JumpForce, 0), ForceMode.Impulse);
             isGrounded = false;
+            oxygen -= 0.3f;
             
         }
+        oxygenTimer += Time.deltaTime;
+        if (oxygenTimer >= 1.5f)
+        {
+            oxygenTimer = 0f;
+            oxygen -= oxygenUsage;
+        }
+        Debug.Log(oxygen);
+        if (oxygen == 0)
+        {
+            Time.timeScale = 0f;
+        }
+        if (!isPut)
+        {
+            if (oxygenTimer >= 1f)
+            {
+                oxygenTimer = 0f;
+                oxygen -= 20; 
+            }
+        }
+        if (oxygen >= 100)
+        {
+            oxygen = 100f;
+        }
+
     }
     void FixedUpdate()
     {
@@ -47,7 +106,22 @@ public class CharacterMovement : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         isGrounded = true;
+
         
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Helmet") && !isPut)
+        {
+            isPut = true;
+            oxygen = 100f;
+            Destroy(other.gameObject);
+        }
+        if (other.gameObject.CompareTag("Bottle"))
+        {
+            oxygen += 20f;
+            Destroy(other.gameObject);
+        }
     }
     public void TurnOffAllLights()
     {

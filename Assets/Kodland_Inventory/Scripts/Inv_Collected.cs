@@ -6,6 +6,7 @@ public class Inv_Collected : MonoBehaviour
     public Sprite image;
     private Inv_Inventory inventory;
 
+
     private void Start()
     {
         inventory = FindObjectOfType<Inv_Inventory>();
@@ -15,6 +16,7 @@ public class Inv_Collected : MonoBehaviour
     {   
         if (other.gameObject.CompareTag("Player"))
             inventory.AddItem(image, itemName, gameObject);
+        
     }
 
 }

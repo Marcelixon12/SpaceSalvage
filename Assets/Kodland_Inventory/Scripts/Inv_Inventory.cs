@@ -15,6 +15,7 @@ public class Inv_Inventory : MonoBehaviour
     [SerializeField] TMP_Text warning;
     [SerializeField] List<GameObject> playerItems = new List<GameObject>();
     GameObject itemPosition;
+   
 
     private void Start()
     {
@@ -41,6 +42,7 @@ public class Inv_Inventory : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             UseItem(0);
+            
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
@@ -116,18 +118,21 @@ public class Inv_Inventory : MonoBehaviour
             newItem.name = itemName;
             playerItems.Add(newItem);
             itemInArm = newItem;
+            
         }
         else
         {
             if (putFind == itemInArm)
             {
                 putFind.SetActive(!putFind.activeSelf);
+                
             }
             else
             {
                 itemInArm.SetActive(false);
                 putFind.SetActive(true);
                 itemInArm = putFind;
+                
             }
         }
     }
