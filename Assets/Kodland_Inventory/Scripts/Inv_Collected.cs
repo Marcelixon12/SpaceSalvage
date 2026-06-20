@@ -13,10 +13,22 @@ public class Inv_Collected : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other)
-    {   
+    {
         if (other.gameObject.CompareTag("Player"))
+        {
+            
             inventory.AddItem(image, itemName, gameObject);
-        
+
+            
+            if (transform.parent != null)
+            {
+                Destroy(transform.parent.gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
     }
 
 }
