@@ -20,6 +20,10 @@ public class CharacterMovement : MonoBehaviour
     public float oxygenUsage = 0;
     public float oxygenTimer = 0f;
     public bool isPut = false;
+    public int cores = 0;
+    public Inv_Inventory inv;
+    public GameObject core;
+    public GameObject[] coreSpawns; 
     
     
     // Start is called before the first frame update
@@ -122,6 +126,11 @@ public class CharacterMovement : MonoBehaviour
             oxygen += 20f;
             Destroy(other.gameObject);
         }
+        if (other.gameObject.CompareTag("DroneLight") && inv.HasItem("GeneratorCore"))
+        {
+            inv.RemoveItem("GeneratorCore");
+            SpawnNewCore();
+        }
     }
     public void TurnOffAllLights()
     {
@@ -134,5 +143,11 @@ public class CharacterMovement : MonoBehaviour
         }
 
         Debug.Log("Wszystkie œwiat³a zosta³y wy³¹czone!");
+    }
+    public void SpawnNewCore()
+    {
+        int spawnPoint = Random.Range(0, coreSpawns.Length);
+
+        Instantiate(core, new Vector3(coreSpawns[spawnPoint].transform.position.x + Random.Range(-1, 1), coreSpawns[spawnPoint].transform.position.y, coreSpawns[spawnPoint].transform.position.z + Random.Range(-1, 1)), Quaternion.identity);
     }
 }

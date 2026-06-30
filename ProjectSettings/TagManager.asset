@@ -8,6 +8,9 @@ TagManager:
   - Bottle
   - Flashlight
   - Charger
+  - Wall
+  - Dron
+  - DroneLight
   layers:
   - Default
   - TransparentFX

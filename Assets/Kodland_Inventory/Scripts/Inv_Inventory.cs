@@ -19,7 +19,8 @@ public class Inv_Inventory : MonoBehaviour
     GameObject itemPosition;
     
     [SerializeField] List<Sprite> inventoryItemSprites = new List<Sprite>();
-    [SerializeField] List<Sprite> defaultButtonSprites = new List<Sprite>(); 
+    [SerializeField] List<Sprite> defaultButtonSprites = new List<Sprite>();
+    public CharacterMovement chara;
 
 
 
@@ -73,8 +74,12 @@ public class Inv_Inventory : MonoBehaviour
             Invoke("WarningUpdate", 1f);
             return;
         }
-
+        
         inventoryItems.Add(itemName);
+        if (itemName == "GeneratorCore")
+        {
+            chara.cores += 1;
+        }
 
         // Przypisujemy grafikê do aktualnego slotu
         var buttonImage = buttons[inventoryItems.Count - 1].GetComponent<Image>();

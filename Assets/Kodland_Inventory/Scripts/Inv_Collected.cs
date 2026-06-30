@@ -5,6 +5,7 @@ public class Inv_Collected : MonoBehaviour
     public string itemName;
     public Sprite image;
     private Inv_Inventory inventory;
+    
 
 
     private void Start()
