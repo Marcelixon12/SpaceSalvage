@@ -9,7 +9,7 @@ public class Wall : MonoBehaviour
         if (other.gameObject.CompareTag("Dron"))
         {
             Rigidbody rb = other.GetComponent<Rigidbody>();
-
+            Debug.Log("Dron colliduje ze œcian¹");
             if (rb != null)
             {
                 rb.velocity = Vector3.zero;
@@ -21,5 +21,6 @@ public class Wall : MonoBehaviour
                 rb.MoveRotation(other.transform.rotation);
             }
         }
+        
     }
 }

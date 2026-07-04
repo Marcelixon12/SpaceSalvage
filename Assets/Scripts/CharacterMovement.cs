@@ -131,6 +131,10 @@ public class CharacterMovement : MonoBehaviour
             inv.RemoveItem("GeneratorCore");
             SpawnNewCore();
         }
+        if (other.gameObject.CompareTag("Spider"))
+        {
+            oxygen -= 5;
+        }
     }
     public void TurnOffAllLights()
     {
