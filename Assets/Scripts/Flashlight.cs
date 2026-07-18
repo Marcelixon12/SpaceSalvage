@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using TMPro;
 using UnityEngine;
 
 public class Flashlight : MonoBehaviour
@@ -11,10 +12,12 @@ public class Flashlight : MonoBehaviour
     public int maxBattery = 100;
     public float timer;
     public int batteryUsage = 1;
+    public TMP_Text batteryText;
     // Start is called before the first frame update
     void Start()
     {
         flash.GetComponent<Light>().enabled = false;
+        batteryText = GameObject.FindGameObjectWithTag("Battery").GetComponent<TMP_Text>();
     }
 
     // Update is called once per frame
@@ -46,13 +49,18 @@ public class Flashlight : MonoBehaviour
         {
             battery = maxBattery;
         }
+        BatteryTextUpdate();
     }
-    public void OnTriggerStay(Collider other)
+    //public void OnTriggerStay(Collider other)
+    //{
+       // if (other.gameObject.CompareTag("Charger") && Input.GetKey(KeyCode.E) && other.gameObject.GetComponent<Charger>().batteryInMagazine > 0)
+        //{
+            //battery += other.gameObject.GetComponent<Charger>().chargeSpeed;
+           // other.gameObject.GetComponent<Charger>().batteryInMagazine -= other.gameObject.GetComponent<Charger>().chargeSpeed;
+        //}
+    //}
+    public void BatteryTextUpdate()
     {
-        if (other.gameObject.CompareTag("Charger") && Input.GetKey(KeyCode.E) && other.gameObject.GetComponent<Charger>().batteryInMagazine > 0)
-        {
-            battery += other.gameObject.GetComponent<Charger>().chargeSpeed;
-            other.gameObject.GetComponent<Charger>().batteryInMagazine -= other.gameObject.GetComponent<Charger>().chargeSpeed;
-        }
+        batteryText.text = "Battery: " + battery.ToString() + "%";
     }
 }

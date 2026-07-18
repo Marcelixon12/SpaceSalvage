@@ -12,6 +12,8 @@ TagManager:
   - Dron
   - DroneLight
   - Spider
+  - Battery
+  - Card
   layers:
   - Default
   - TransparentFX

@@ -6,7 +6,7 @@ public class Charger : MonoBehaviour
 {
     public int batteryInMagazine = 100;
     
-    public int chargeSpeed = 25;
+    public int chargeSpeed = 1;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,10 +20,15 @@ public class Charger : MonoBehaviour
     }
     public void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.CompareTag("Flashlight") && Input.GetKeyDown(KeyCode.E) && batteryInMagazine > 0 && other.gameObject.GetComponent<Flashlight>().battery < 100)
+        if (other.gameObject.CompareTag("Player") && Input.GetKeyDown(KeyCode.E) && batteryInMagazine > 0 && other.gameObject.GetComponent<Flashlight>().battery < 100)
         {
-            other.gameObject.GetComponent<Flashlight>().battery += chargeSpeed;
-            
+            Flashlight flashlight = other.GetComponentInChildren<Flashlight>();
+
+            if (flashlight != null)
+            {
+                flashlight.battery += chargeSpeed;
+            }
+
             batteryInMagazine -= chargeSpeed;
         }
     }

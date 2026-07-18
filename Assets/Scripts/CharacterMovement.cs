@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class CharacterMovement : MonoBehaviour
 {
@@ -23,7 +24,11 @@ public class CharacterMovement : MonoBehaviour
     public int cores = 0;
     public Inv_Inventory inv;
     public GameObject core;
-    public GameObject[] coreSpawns; 
+    public GameObject[] coreSpawns;
+    public TMP_Text oxygenText;
+    public TMP_Text cardText;
+    public GameObject Mask;
+    public GameObject cardText2;
     
     
     // Start is called before the first frame update
@@ -100,6 +105,7 @@ public class CharacterMovement : MonoBehaviour
         {
             oxygen = 100f;
         }
+        OxygenTextUpdate();
 
     }
     void FixedUpdate()
@@ -120,6 +126,7 @@ public class CharacterMovement : MonoBehaviour
             isPut = true;
             oxygen = 100f;
             Destroy(other.gameObject);
+            Mask.SetActive(true);
         }
         if (other.gameObject.CompareTag("Bottle"))
         {
@@ -134,6 +141,10 @@ public class CharacterMovement : MonoBehaviour
         if (other.gameObject.CompareTag("Spider"))
         {
             oxygen -= 5;
+        }
+        if(other.gameObject.CompareTag("Card"))
+        {
+            cardText2.SetActive(true);
         }
     }
     public void TurnOffAllLights()
@@ -153,5 +164,10 @@ public class CharacterMovement : MonoBehaviour
         int spawnPoint = Random.Range(0, coreSpawns.Length);
 
         Instantiate(core, new Vector3(coreSpawns[spawnPoint].transform.position.x + Random.Range(-1, 1), coreSpawns[spawnPoint].transform.position.y, coreSpawns[spawnPoint].transform.position.z + Random.Range(-1, 1)), Quaternion.identity);
+    }
+    public void OxygenTextUpdate()
+    {
+        oxygenText.text = "O2: " + Mathf.FloorToInt(oxygen).ToString() + "%";
+        cardText.text = "Card Level: " + Level.ToString();
     }
 }
