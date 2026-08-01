@@ -6,7 +6,10 @@ public class Charger : MonoBehaviour
 {
     public int batteryInMagazine = 100;
     
-    public int chargeSpeed = 1;
+    public int chargeSpeed = 5;
+    public float holdTime = 3;
+    public float timer = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,18 +21,52 @@ public class Charger : MonoBehaviour
     {
         
     }
+    
     public void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.CompareTag("Player") && Input.GetKeyDown(KeyCode.E) && batteryInMagazine > 0 && other.gameObject.GetComponent<Flashlight>().battery < 100)
+        if (other.gameObject.CompareTag("Player"))
         {
-            Flashlight flashlight = other.GetComponentInChildren<Flashlight>();
-
-            if (flashlight != null)
+            Flashlight flashlight = other.gameObject.GetComponentInChildren<Flashlight>();
+            
+                                                          
+            if (flashlight != null && batteryInMagazine > 0 && flashlight.battery < 100)
             {
-                flashlight.battery += chargeSpeed;
+                
+                if (Input.GetKey(KeyCode.E))
+                {
+                    timer += Time.deltaTime;
+                   
+                    if (timer >= holdTime)
+                    {
+                        int neededEnergy = 100 - flashlight.battery;
+                        timer = 0;
+                        if (batteryInMagazine >= neededEnergy)
+                        {
+                            flashlight.battery += neededEnergy;  
+                            batteryInMagazine -= neededEnergy;   
+                        }
+                        else
+                        {
+                            flashlight.battery += batteryInMagazine; 
+                            batteryInMagazine = 0;
+                        }
+                    }
+                }
+                else if(Input.GetKeyUp(KeyCode.E))
+                {
+                    timer = 0f;
+                }
             }
 
-            batteryInMagazine -= chargeSpeed;
+            
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            timer = 0f;
+           
         }
     }
 }

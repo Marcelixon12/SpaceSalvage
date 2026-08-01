@@ -170,4 +170,5 @@ public class CharacterMovement : MonoBehaviour
         oxygenText.text = "O2: " + Mathf.FloorToInt(oxygen).ToString() + "%";
         cardText.text = "Card Level: " + Level.ToString();
     }
+    
 }
