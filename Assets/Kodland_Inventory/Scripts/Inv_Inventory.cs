@@ -15,7 +15,7 @@ public class Inv_Inventory : MonoBehaviour
     [SerializeField] Transform itemPoint;
     [SerializeField] Transform[] itemPositions;
     [SerializeField] TMP_Text warning;
-    [SerializeField] List<GameObject> playerItems = new List<GameObject>();
+    public  List<GameObject> playerItems = new List<GameObject>();
     GameObject itemPosition;
     
     [SerializeField] List<Sprite> inventoryItemSprites = new List<Sprite>();
@@ -81,12 +81,11 @@ public class Inv_Inventory : MonoBehaviour
             chara.cores += 1;
         }
 
-        // Przypisujemy grafikê do aktualnego slotu
         var buttonImage = buttons[inventoryItems.Count - 1].GetComponent<Image>();
         buttonImage.sprite = img;
-        buttonImage.color = Color.white; // Upewniamy siê, ¿e slot jest widoczny
+        buttonImage.color = Color.white;
 
-        Destroy(obj);
+        obj.SetActive(false);
     }
 
     void WarningUpdate()
@@ -179,9 +178,21 @@ public class Inv_Inventory : MonoBehaviour
     public void RemoveItem(string itemName)
     {
         int itemIndex = inventoryItems.IndexOf(itemName);
-        if (itemIndex == -1) return; 
+        if (itemIndex == -1) return;
 
-        
+        if (itemInArm != null && (itemInArm.name == itemName || itemInArm.name.StartsWith(itemName)))
+        {
+            
+            if (playerItems.Contains(itemInArm))
+            {
+                playerItems.Remove(itemInArm);
+            }
+
+            Destroy(itemInArm); 
+            itemInArm = null;   
+        }
+
+
         if (itemInArm != null && (itemInArm.name == itemName || itemInArm.name.StartsWith(itemName)))
         {
             Destroy(itemInArm);
@@ -240,5 +251,41 @@ public class Inv_Inventory : MonoBehaviour
             }
         }
     }
+    public List<string> GetInventoryItems()
+    {
+        return inventoryItems;
+    }
+    public void RebuildInventoryUI()
+    {
+        for (int i = 0; i < buttons.Count; i++)
+        {
+            if (i < defaultButtonSprites.Count)
+            {
+                buttons[i].GetComponent<Image>().sprite = defaultButtonSprites[i];
+                buttons[i].GetComponent<Image>().color = Color.white;
+            }
+        }
 
+        SaveSystem saveSystem = FindObjectOfType<SaveSystem>();
+
+        for (int i = 0; i < inventoryItems.Count; i++)
+        {
+            string itemName = inventoryItems[i];
+            if (string.IsNullOrEmpty(itemName) || i >= buttons.Count) continue;
+
+            // Szukaj przez Inv_Collected.itemName zamiast GameObject.name
+            foreach (GameObject obj in saveSystem.allStartingItemsInWorld)
+            {
+                if (obj == null) continue;
+
+                Inv_Collected collected = obj.GetComponentInChildren<Inv_Collected>(true);
+                if (collected != null && collected.itemName == itemName && collected.image != null)
+                {
+                    buttons[i].GetComponent<Image>().sprite = collected.image;
+                    buttons[i].GetComponent<Image>().color = Color.white;
+                    break;
+                }
+            }
+        }
+    }
 }

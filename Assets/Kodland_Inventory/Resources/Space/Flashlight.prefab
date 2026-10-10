@@ -111,7 +111,7 @@ GameObject:
   - component: {fileID: 349930811363473103}
   m_Layer: 0
   m_Name: Flashlight
-  m_TagString: Flashlight
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -220,9 +220,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flash: {fileID: 986089915915574531}
   isTurn: 0
-  battery: 100
+  battery: 67
+  maxBattery: 100
   timer: 0
   batteryUsage: 1
+  batteryText: {fileID: 0}
+  startingBattery: -1
 --- !u!114 &-3661884397239542165
 MonoBehaviour:
   m_ObjectHideFlags: 0

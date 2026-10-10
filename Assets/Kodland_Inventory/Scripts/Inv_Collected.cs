@@ -23,11 +23,11 @@ public class Inv_Collected : MonoBehaviour
             
             if (transform.parent != null)
             {
-                Destroy(transform.parent.gameObject);
+                transform.parent.gameObject.SetActive(false);
             }
             else
             {
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             }
         }
     }

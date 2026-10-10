@@ -68,6 +68,7 @@ public class Box : MonoBehaviour
             anim.SetBool("Open", true);
             upgrader.SetActive(true);
             upgraderLight.GetComponent<Light>().enabled = true;
+            FindObjectOfType<SaveSystem>().RegisterSpawnedItem(upgrader);
             u.code = "";
         }
         else

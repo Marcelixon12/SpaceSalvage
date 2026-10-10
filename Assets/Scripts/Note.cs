@@ -22,7 +22,7 @@ public class Note : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             NoteUI.SetActive(true);
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
    

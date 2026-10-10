@@ -20,8 +20,13 @@ public class Upgrader : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            if(card.Level == 1)
+            {
+                card.actualMission = card.mission5;
+            }
             card.Level += 1;
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+            
         }
     }
 }

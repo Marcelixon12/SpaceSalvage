@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -8,48 +9,45 @@ public class Flashlight : MonoBehaviour
 {
     [SerializeField] GameObject flash;
     public bool isTurn = false;
-    public int battery = 100;
+    [NonSerialized] public int battery = 100;
     public int maxBattery = 100;
     public float timer;
     public int batteryUsage = 1;
     public TMP_Text batteryText;
-    // Start is called before the first frame update
+    
+    [NonSerialized] public bool isLoaded = false;
     void Start()
     {
+        if (!isLoaded)
+            battery = 100;
+
+
         flash.GetComponent<Light>().enabled = false;
         batteryText = GameObject.FindGameObjectWithTag("Battery").GetComponent<TMP_Text>();
+        BatteryTextUpdate();
     }
 
     // Update is called once per frame
     void Update()
     {
         Debug.Log(battery);
-        if (Input.GetMouseButtonDown(0) && !isTurn)
+        
+        
+        if (battery > 0)
         {
-            flash.GetComponent<Light>().enabled = true;
-            isTurn = true;
-            
+            FlashlightUse();
         }
-        else if (Input.GetMouseButtonDown(0) && isTurn)
+        else if (battery <= 0)
         {
-            flash.GetComponent<Light>().enabled = false;
-            isTurn = false;
-        }
-        if (isTurn)
-        {
+            battery = 0;
 
-            timer += Time.deltaTime;
-            if (timer >= 3)
-            {
-                timer = 0;
-                battery -= batteryUsage; 
-            }
         }
         if (battery >= maxBattery)
         {
             battery = maxBattery;
         }
         BatteryTextUpdate();
+        
     }
     //public void OnTriggerStay(Collider other)
     //{
@@ -62,5 +60,34 @@ public class Flashlight : MonoBehaviour
     public void BatteryTextUpdate()
     {
         batteryText.text = "Battery: " + battery.ToString() + "%";
+    }
+    public void FlashlightUse()
+    {
+        if (Input.GetMouseButtonDown(0) && !isTurn)
+        {
+            flash.GetComponent<Light>().enabled = true;
+            isTurn = true;
+
+        }
+        else if (Input.GetMouseButtonDown(0) && isTurn)
+        {
+            flash.GetComponent<Light>().enabled = false;
+            isTurn = false;
+        }
+        if (isTurn)
+        {
+
+            timer += Time.deltaTime;
+            if (timer >= 5)
+            {
+                timer = 0;
+                battery -= batteryUsage;
+            }
+        }
+    }
+    public void SetBattery(int value)
+    {
+        battery = value;
+        BatteryTextUpdate();
     }
 }

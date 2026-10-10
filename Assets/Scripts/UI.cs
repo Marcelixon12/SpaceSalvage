@@ -16,6 +16,7 @@ public class UI : MonoBehaviour
     public GameObject Note7;
     public GameObject Note8;
     public GameObject Note9;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -114,4 +115,5 @@ public class UI : MonoBehaviour
     {
         Note9.SetActive(false);
     }
+    
 }

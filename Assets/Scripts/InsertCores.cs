@@ -31,6 +31,7 @@ public class InsertCores : MonoBehaviour
                     Core.SetActive(true);
                     inventory.RemoveItem(CoreID);
                     gameObject.GetComponent<BoxCollider>().enabled = false;
+                    player.GetComponent<CharacterMovement>().cores += 1;
                 }
                 else
                 {

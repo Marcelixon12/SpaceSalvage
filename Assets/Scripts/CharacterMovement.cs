@@ -10,7 +10,7 @@ public class CharacterMovement : MonoBehaviour
     public float shiftSpeed = 7f;
     public float currentSpeed;
     [SerializeField] float JumpForce = 6f;
-    public int Level = 1;
+    public int Level = 0;
     
     Vector3 direction;
     public bool isGrounded = false;
@@ -29,8 +29,20 @@ public class CharacterMovement : MonoBehaviour
     public TMP_Text cardText;
     public GameObject Mask;
     public GameObject cardText2;
-    
-    
+    public GameObject Helmet;
+    public TMP_Text missionText;
+    public string mission1 = "Put on Oxygen Mask: ";
+    public string mission2 = "Find Secuirity Pass in your room";
+    public string mission3 = "Find something to light your way";
+    public string mission4 = "Upgrade the pass to get to the generator room";
+    public string mission5 = "Go to the generator room and check what's wrong";
+    public string mission6 = "Find 5 generator cores and insert them: ";
+    public string actualMission;
+    public float oxygenTimerUI = 5f;
+
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +55,8 @@ public class CharacterMovement : MonoBehaviour
         cardLight.GetComponent<Light>().enabled = true;
         helmetLight.GetComponent<Light>().enabled = true;
         oxygenUsage = 0.2f;
+        oxygenTimerUI = 5f;
+        actualMission = mission1 + Mathf.FloorToInt(oxygenTimerUI).ToString() + "s"; 
         
     }
 
@@ -51,44 +65,53 @@ public class CharacterMovement : MonoBehaviour
     {
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
-
+        
         direction = new Vector3(moveHorizontal, 0.0f, moveVertical);
         direction = transform.TransformDirection(direction);
         if (Input.GetKey(KeyCode.LeftShift))
         {
             
             currentSpeed = shiftSpeed;
-            oxygenUsage = 0.7f;
+            oxygenUsage = 0.35f;
             
         }
         else if (!Input.GetKey(KeyCode.LeftShift) && direction.x == 0 && direction.z == 0)
         {
             
             currentSpeed = moveSpeed;
-            oxygenUsage = 0.2f;
+            oxygenUsage = 0.05f;
 
         }
         else if (!Input.GetKey(KeyCode.LeftShift) && direction.x != 0 && direction.z != 0)
         {
 
             currentSpeed = moveSpeed;
-            oxygenUsage = 0.4f;
+            oxygenUsage = 0.1f;
 
         }
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.AddForce(new Vector3(0, JumpForce, 0), ForceMode.Impulse);
             isGrounded = false;
-            oxygen -= 0.3f;
+            oxygen -= 0.15f;
             
         }
-        oxygenTimer += Time.deltaTime;
-        if (oxygenTimer >= 1.5f)
+        if(isPut)
         {
-            oxygenTimer = 0f;
-            oxygen -= oxygenUsage;
+            oxygenTimer += Time.deltaTime;
+            if (oxygenTimer >= 1.5f)
+            {
+                oxygenTimer = 0f;
+                oxygen -= oxygenUsage;
+            }
+            Mask.SetActive(true);
+            Helmet.SetActive(false);
+            cardText2.SetActive(true);
+            
         }
-        Debug.Log(oxygen);
+        
+
+            Debug.Log(oxygen);
         if (oxygen == 0)
         {
             Time.timeScale = 0f;
@@ -100,12 +123,26 @@ public class CharacterMovement : MonoBehaviour
                 oxygenTimer = 0f;
                 oxygen -= 20; 
             }
+            Mask.SetActive(false);
+            Helmet.SetActive(true);
+            actualMission = mission1 + Mathf.FloorToInt(oxygenTimerUI).ToString() + "s";
         }
         if (oxygen >= 100)
         {
             oxygen = 100f;
         }
-        OxygenTextUpdate();
+        if (oxygenTimerUI <= 0f)
+        {
+            oxygenTimerUI = 0f;
+        }
+        else
+            oxygenTimerUI -= Time.deltaTime;
+        TextsUpdate();
+        if (actualMission == mission6)
+        {
+            actualMission = mission6 + "(" + cores.ToString() + "/5)";
+        }
+
 
     }
     void FixedUpdate()
@@ -125,13 +162,17 @@ public class CharacterMovement : MonoBehaviour
         {
             isPut = true;
             oxygen = 100f;
-            Destroy(other.gameObject);
+            other.gameObject.SetActive(false);
             Mask.SetActive(true);
+            actualMission = mission2;
+            
+
         }
         if (other.gameObject.CompareTag("Bottle"))
         {
             oxygen += 20f;
-            Destroy(other.gameObject);
+
+            other.gameObject.SetActive(false);
         }
         if (other.gameObject.CompareTag("DroneLight") && inv.HasItem("GeneratorCore"))
         {
@@ -144,7 +185,17 @@ public class CharacterMovement : MonoBehaviour
         }
         if(other.gameObject.CompareTag("Card"))
         {
+            Level = 1;
             cardText2.SetActive(true);
+            actualMission = mission3;
+        }
+        if (other.gameObject.CompareTag("Flashlight"))
+        {
+            actualMission = mission4;
+        }
+        if (other.gameObject.CompareTag("Generator"))
+        {
+            actualMission = mission6;
         }
     }
     public void TurnOffAllLights()
@@ -157,7 +208,7 @@ public class CharacterMovement : MonoBehaviour
             l.enabled = false;
         }
 
-        Debug.Log("Wszystkie œwiat³a zosta³y wy³¹czone!");
+       
     }
     public void SpawnNewCore()
     {
@@ -165,10 +216,11 @@ public class CharacterMovement : MonoBehaviour
 
         Instantiate(core, new Vector3(coreSpawns[spawnPoint].transform.position.x + Random.Range(-1, 1), coreSpawns[spawnPoint].transform.position.y, coreSpawns[spawnPoint].transform.position.z + Random.Range(-1, 1)), Quaternion.identity);
     }
-    public void OxygenTextUpdate()
+    public void TextsUpdate()
     {
         oxygenText.text = "O2: " + Mathf.FloorToInt(oxygen).ToString() + "%";
         cardText.text = "Card Level: " + Level.ToString();
+        missionText.text = "Mission: " + actualMission;
     }
     
 }
